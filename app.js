@@ -38,52 +38,54 @@ io.on("connection", (socket) => {
   socket.on("player-moved", (data) => {
     moveCount += 1;
     console.log(moveCount);
-    const position = { x: data.position.x + 1, y: data.position.y + 1 };
+
+    const haruPosition = {
+      x: data.haruPosition.x + 1,
+      y: data.haruPosition.y + 1,
+    };
     const player = socket.handshake.auth.player;
     const currentPlayer = player === "player1" ? "player2" : "player1";
-    console.log(currentPlayer);
-    gamefield[position.x][position.y] = player;
+    gamefield[haruPosition.x][haruPosition.y] = player;
 
     io.to(socket.handshake.auth.room).emit("switch-player", {
       currentPlayer: currentPlayer,
     });
 
-    if (moveCount >= 3) {
-      if (
-        (gamefield[0][0] == player &&
-          gamefield[0][1] == player &&
-          gamefield[0][2] == player) ||
-        (gamefield[1][0] == player &&
-          gamefield[1][1] == player &&
-          gamefield[1][2] == player) ||
-        (gamefield[2][0] == player &&
-          gamefield[2][1] == player &&
-          gamefield[2][2] == player) ||
-        (gamefield[0][2] == player &&
-          gamefield[1][2] == player &&
-          gamefield[2][2] == player) ||
-        (gamefield[0][1] == player &&
-          gamefield[1][1] == player &&
-          gamefield[2][1] == player) ||
-        (gamefield[0][0] == player &&
-          gamefield[1][0] == player &&
-          gamefield[2][0] == player) ||
-        (gamefield[0][0] == player &&
-          gamefield[1][1] == player &&
-          gamefield[2][2] == player) ||
-        (gamefield[0][2] == player &&
-          gamefield[1][1] == player &&
-          gamefield[2][0] == player)
-      ) {
-        io.to(socket.handshake.auth.room).emit("winner-detected", {
-          player: player,
-        });
-      }
-    }
+    // if (moveCount >= 3) {
+    //   if (
+    //     (gamefield[0][0] == player &&
+    //       gamefield[0][1] == player &&
+    //       gamefield[0][2] == player) ||
+    //     (gamefield[1][0] == player &&
+    //       gamefield[1][1] == player &&
+    //       gamefield[1][2] == player) ||
+    //     (gamefield[2][0] == player &&
+    //       gamefield[2][1] == player &&
+    //       gamefield[2][2] == player) ||
+    //     (gamefield[0][2] == player &&
+    //       gamefield[1][2] == player &&
+    //       gamefield[2][2] == player) ||
+    //     (gamefield[0][1] == player &&
+    //       gamefield[1][1] == player &&
+    //       gamefield[2][1] == player) ||
+    //     (gamefield[0][0] == player &&
+    //       gamefield[1][0] == player &&
+    //       gamefield[2][0] == player) ||
+    //     (gamefield[0][0] == player &&
+    //       gamefield[1][1] == player &&
+    //       gamefield[2][2] == player) ||
+    //     (gamefield[0][2] == player &&
+    //       gamefield[1][1] == player &&
+    //       gamefield[2][0] == player)
+    //   ) {
+    //     io.to(socket.handshake.auth.room).emit("winner-detected", {
+    //       player: player,
+    //     });
+    //   }
+    // }
 
     socket.to(socket.handshake.auth.room).emit("move-done", {
-      sphere: data.sphere,
-      position: data.position,
+      haruPosition: data.haruPosition,
     });
   });
 
